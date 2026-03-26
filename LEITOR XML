@@ -1,0 +1,22 @@
+import xml.etree.ElementTree as ET
+
+# Caminho do arquivo XML
+arquivo_xml = "arquivo_update2026-03-17T00_00_00.000Z.xml"
+
+# Carregar o XML
+tree = ET.parse(arquivo_xml)
+root = tree.getroot()
+
+# Função para coletar todas as tags (colunas)
+def extrair_colunas(elemento, colunas=set()):
+    for filho in elemento:
+        colunas.add(filho.tag)
+        extrair_colunas(filho, colunas)
+    return colunas
+
+colunas = extrair_colunas(root)
+
+# Exibir resultado
+print("Colunas encontradas:")
+for col in sorted(colunas):
+    print(col)
