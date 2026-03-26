@@ -1,0 +1,42 @@
+import pyodbc
+import pandas as pd
+
+# 🔹 Dados de conexão (ajuste com os seus)
+server = ""
+database = ""
+username = ""
+password = ""
+
+# 🔹 String de conexão
+conn_str = (
+    "DRIVER={ODBC Driver 18 for SQL Server};"
+    f"SERVER={server};"
+    f"DATABASE={database};"
+    f"UID={username};"
+    f"PWD={password};"
+    "Authentication=ActiveDirectoryPassword;"  # 👈 essencial para Fabric
+    "Encrypt=yes;"
+    "TrustServerCertificate=no;"
+    "Connection Timeout=30;"
+)
+
+# 🔹 Conectar
+conn = pyodbc.connect(conn_str)
+
+# 🔹 Query SQL
+query = """
+SELECT TOP 100 *
+FROM vendas
+"""
+
+# 🔹 Executar e trazer para DataFrame
+df = pd.read_sql(query, conn)
+
+# 🔹 Visualizar resultado
+print(df.head())
+
+# 🔹 Fechar conexão
+conn.close()
+
+# Windows
+df.to_excel(r"C:\Users\Downloads\arquivo.xlsx", index=False)
